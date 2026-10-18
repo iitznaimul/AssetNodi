@@ -1679,6 +1679,17 @@ dialog:not(.pdg):not(.ldg):not(.cdg):not(.wzd) .dm h2{font:800 clamp(24px,7vw,28
 .dm .er:empty{display:none}
 .dm #ns{margin-top:14px}
 </style>
+<style>/* auth form alignment */
+.dm #af .lrow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:16px 0 6px}
+.dm #af .lrow label{margin:0}
+.dm #af .lrow .lk{margin:0;font-size:13.5px;white-space:nowrap}
+.dm #af .pw{margin:0}
+.dm #sb1{margin-top:24px}
+.dm .rfl{display:inline-block;margin:16px 0 0;padding:4px 0}
+.dm #arf{margin-top:10px}
+.dm .swt{margin:24px 0 0}
+.dm #af .er{margin-top:14px}
+</style>
 </head>
 <body><a class="skip" href="#main">Skip to content</a><noscript><p style="padding:16px;text-align:center">AssetNodi needs JavaScript to load listings. Please enable it and reload.</p></noscript>
 <div class="w">
@@ -1843,15 +1854,24 @@ function paintAv(){var a=$("av");if(!user)return;var n=((me&&me.username)||"U").
 
 $("ba").onclick=function(){if(!READY)return;user?sb.auth.signOut():authView()};
 function phoneNorm(v){var d=en(v).replace(/\D/g,"");if(d.indexOf("880")===0)d=d.slice(2);if(d.charAt(0)!=="0")d="0"+d;return/^01[3-9]\d{8}$/.test(d)?d:null}
-async function loginEmail(v){v=String(v||"").trim();if(v.indexOf("@")>-1)return{email:v};var ph=phoneNorm(v);if(!ph)return{error:"Enter a valid mobile number (01XXXXXXXXX) or email."};var r=await sb.rpc("email_for_phone",{p:ph});if(r.error||!r.data)return{error:"Wrong mobile number or password."};return{email:r.data}}
+async function loginEmail(v){
+  v=String(v||"").trim();
+  if(!v)return{error:"Enter your username or email."};
+  if(v.indexOf("@")>-1)return{email:v};
+  var un=v.replace(/^@/,"").toLowerCase();
+  if(!/^[a-z0-9_.]{2,30}$/.test(un))return{error:"Wrong username, email or password."};
+  var r=await sb.rpc("email_for_username",{p:un});
+  if(r.error||!r.data)return{error:"Wrong username, email or password."};
+  return{email:r.data}
+}
 function phoneEmail(d){return"88"+d+"@phone.assetnodi.com"}
 var MC=['<svg class="mc" viewBox="0 0 120 120" aria-hidden="true"><ellipse class="mc-sh" cx="60" cy="116" rx="26" ry="4" fill="#000" opacity=".18"/><g class="mc-b"><path d="M60 12C60 12 24 54 24 78a36 36 0 0 0 72 0C96 54 60 12 60 12Z" fill="#8b5cf6"/><ellipse cx="42" cy="68" rx="5" ry="11" fill="#fff" opacity=".25" transform="rotate(18 42 68)"/><g class="mc-e"><circle cx="48" cy="76" r="6" fill="#fff"/><circle cx="72" cy="76" r="6" fill="#fff"/><circle cx="49" cy="77" r="3" fill="#14141f"/><circle cx="73" cy="77" r="3" fill="#14141f"/></g><path d="M50 90Q60 101 70 90" stroke="#14141f" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="39" cy="88" r="4.5" fill="#c6ff3d" opacity=".75"/><circle cx="81" cy="88" r="4.5" fill="#c6ff3d" opacity=".75"/><g class="mc-w"><path d="M93 84Q108 80 109 64" stroke="#8b5cf6" stroke-width="9" fill="none" stroke-linecap="round"/><circle cx="109" cy="61" r="7" fill="#8b5cf6"/></g></g></svg>','<svg class="mc mc-j" viewBox="0 0 120 120" aria-hidden="true"><g class="mc-s"><path d="M8 26 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#c6ff3d"/></g><g class="mc-s"><path d="M104 20 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#c6ff3d"/></g><g class="mc-s"><path d="M100 58 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#8b5cf6"/></g><g class="mc-s"><path d="M10 60 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#8b5cf6"/></g><g class="mc-s"><path d="M84 6 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#c6ff3d"/></g><g class="mc-s"><path d="M24 8 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#8b5cf6"/></g><ellipse class="mc-sh" cx="60" cy="116" rx="26" ry="4" fill="#000" opacity=".18"/><g class="mc-b"><path d="M60 12C60 12 24 54 24 78a36 36 0 0 0 72 0C96 54 60 12 60 12Z" fill="#8b5cf6"/><ellipse cx="42" cy="68" rx="5" ry="11" fill="#fff" opacity=".25" transform="rotate(18 42 68)"/><path d="M48 32L60 2L72 32Z" fill="#c6ff3d"/><path d="M53 22H67" stroke="#8b5cf6" stroke-width="3"/><circle cx="60" cy="3" r="4.5" fill="#fff"/><g class="mc-e"><circle cx="48" cy="76" r="6" fill="#fff"/><circle cx="72" cy="76" r="6" fill="#fff"/><circle cx="49" cy="77" r="3" fill="#14141f"/><circle cx="73" cy="77" r="3" fill="#14141f"/></g><path d="M50 90Q60 101 70 90" stroke="#14141f" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="39" cy="88" r="4.5" fill="#c6ff3d" opacity=".75"/><circle cx="81" cy="88" r="4.5" fill="#c6ff3d" opacity=".75"/><path d="M27 82Q12 76 13 56" stroke="#8b5cf6" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M93 82Q108 76 107 56" stroke="#8b5cf6" stroke-width="9" fill="none" stroke-linecap="round"/><circle cx="13" cy="53" r="7" fill="#8b5cf6"/><circle cx="107" cy="53" r="7" fill="#8b5cf6"/></g></svg>'],LG='<div class="logo" style="justify-content:center;margin:2px 0 0"><span class="mk" role="img" aria-label="AssetNodi logo"></span><span>Asset<b>Nodi</b></span></div>';
 function authView(mode){var su=mode==="signup";
- open(LG+MC[su?1:0]+'<h2 style="text-align:center;font-size:26px;margin:4px 0 4px">'+(su?"Create your account":"Welcome back")+'</h2><p class="asub">'+(su?"Free to join. Takes 20 seconds.":"Use your mobile number or email to continue")+'</p><form id="af" novalidate>'
+ open(LG+MC[su?1:0]+'<h2 style="text-align:center;font-size:26px;margin:4px 0 4px">'+(su?"Create your account":"Welcome back")+'</h2><p class="asub">'+(su?"Free to join. Takes 20 seconds.":"Use your username or email to continue")+'</p><form id="af" novalidate>'
   +(su?'<div class="two"><div><label>First name <span class="rq">*</span></label><input id="afn" maxlength="30" required placeholder="e.g. Naimul" autocomplete="given-name"></div><div><label>Last name <span class="rq">*</span></label><input id="aln" maxlength="30" required placeholder="e.g. Islam" autocomplete="family-name"></div></div>'
    +'<label>Email <span class="rq">*</span></label><input id="ae" type="email" required placeholder="your@email.com" autocomplete="email" autocapitalize="none">'
    +'<label>Mobile number <span class="rq">*</span></label><div class="ph"><span>+88</span><input id="am" type="tel" inputmode="numeric" maxlength="11" required placeholder="01XXXXXXXXX" autocomplete="tel-national"></div><small class="hint">11 digits, starting with 01</small>'
-   :'<label>Mobile number or email</label><input id="ae" type="text" required placeholder="01XXXXXXXXX or your@email.com" autocomplete="username" autocapitalize="none" spellcheck="false">')
+   :'<label>Username or email</label><input id="ae" type="text" required placeholder="yourname or your@email.com" autocomplete="username" autocapitalize="none" spellcheck="false">')
   +'<div class="lrow"><label>Password'+(su?' <span class="rq">*</span>':'')+'</label>'+(su?'':'<button type="button" class="lk" id="fp2">Forgot password?</button>')+'</div><div class="pw"><input id="ap" type="password" minlength="6" required placeholder="'+(su?"At least 6 characters":"Enter your password")+'" autocomplete="'+(su?"new-password":"current-password")+'"><button type="button" id="pt">Show</button></div>'
   +(su?'<label>Confirm password <span class="rq">*</span></label><input id="ap2" type="password" minlength="6" required placeholder="Type the password again" autocomplete="new-password">'
    +'<button type="button" class="lk rfl" id="rfb">Have a referral code?</button><input id="arf" maxlength="30" placeholder="Referral code" autocapitalize="characters" hidden>':'')
@@ -1860,11 +1880,11 @@ function authView(mode){var su=mode==="signup";
  $("sw").onclick=function(){authView(su?"login":"signup")};
  $("pt").onclick=function(){var i=$("ap"),h=i.type==="password";i.type=h?"text":"password";if($("ap2"))$("ap2").type=i.type;this.textContent=h?"Hide":"Show"};
  if(su){$("rfb").onclick=function(){this.hidden=true;$("arf").hidden=false;$("arf").focus()};$("am").oninput=function(){this.value=dg9(this.value)}}
- if(!su)$("fp2").onclick=async function(){var iv=$("ae").value.trim();if(!iv){$("er").textContent="Enter your mobile number or email above first, then tap Forgot password.";return}var l=await loginEmail(iv);if(l.error){$("er").textContent=l.error;return}var r=await sb.auth.resetPasswordForEmail(l.email);$("er").textContent=r.error?r.error.message:"If that email has an account, a reset link is on its way."};
+ if(!su)$("fp2").onclick=async function(){var iv=$("ae").value.trim();if(!iv){$("er").textContent="Enter your username or email above first, then tap Forgot password.";return}var l=await loginEmail(iv);if(l.error){$("er").textContent=l.error;return}var r=await sb.auth.resetPasswordForEmail(l.email);$("er").textContent=r.error?r.error.message:"If that email has an account, a reset link is on its way."};
  $("af").onsubmit=async function(e){e.preventDefault();var E=$("er");E.textContent="";var b=$("sb1");
-  if(!su){var iv=$("ae").value.trim();if(!iv){E.textContent="Enter your mobile number or email.";return}
+  if(!su){var iv=$("ae").value.trim();if(!iv){E.textContent="Enter your username or email.";return}
    b.disabled=true;var l=await loginEmail(iv);if(l.error){b.disabled=false;E.textContent=l.error;return}
-   var r=await sb.auth.signInWithPassword({email:l.email,password:$("ap").value});b.disabled=false;r.error?E.textContent=r.error.message==="Invalid login credentials"?"Wrong mobile number, email or password.":r.error.message:$("dg").close();return}
+   var r=await sb.auth.signInWithPassword({email:l.email,password:$("ap").value});b.disabled=false;r.error?E.textContent=r.error.message==="Invalid login credentials"?"Wrong username, email or password.":r.error.message:$("dg").close();return}
   var fn=$("afn").value.trim(),ln=$("aln").value.trim(),em=$("ae").value.trim(),ph=phoneNorm($("am").value),pw=$("ap").value;
   if(!fn||!ln){E.textContent="Please enter your first and last name.";return}
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){E.textContent="Enter a valid email address.";return}
